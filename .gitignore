@@ -1,0 +1,6 @@
+*.pyc
+env/**
+*.mp3
+*.jpg
+*.png
+*.jpeg
