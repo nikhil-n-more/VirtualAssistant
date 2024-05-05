@@ -5,7 +5,7 @@ from urllib.request import urlopen
 from datetime import datetime
 from psutil import virtual_memory, cpu_percent
 import cv2
-import face_recognition as fr
+# import face_recognition as fr
 import os
 import numpy as np
 import webbrowser
@@ -17,7 +17,7 @@ class Internet:
         super().__init__()
         self.speed_test = Speedtest()
         self.speed_test.get_best_server()
-    
+
     def get_upload_speed(self):
         """Returns Upload speed of the internet
 
@@ -146,7 +146,7 @@ class UserAccess:
         # self.region = data['region']
         # self.city = data['city'].decode("utf-8").encode("windows-1252").decode("utf-8")
         self.city = "Amalner"
-        print(self.city)
+        instantPrint(self.city)
         return {
             "IP" : data['ip'],
             "Organisation" : data['org'],
@@ -217,87 +217,93 @@ class funtools:
 
     def get_in_handwriting(self, text, path="handwritten.png", color=[0,0,138]):
         text_to_handwriting(text, path, color)        
-        print("done")
+        instantPrint("done")
 
     def pic_to_ascii(self, inpath, outpath="ascii_art.png"):
-        image_to_ascii_art(npath, outpath)
-        print("Done")
+        image_to_ascii_art(inpath, outpath)
+        instantPrint("Done")
 
 class extras:
     def __init__(self):
         super().__intit__()
 
-class FaceRecognition:
-    def __init__(self):
-        super().__init__()
-        path = 'users/'
-        images = []
-        self.classNames = []
-        self.encodings = []
-        # Available images
-        myList = os.listdir(path)
-        for cl in myList:
-            curImage = cv2.imread(os.path.join(path, cl))
-            # Append the images to list
-            images.append(curImage)
-            # Append image names to list
-            # name = os.path.spl
-            self.classNames.append(os.path.splitext(cl)[0])
-        self.compute_encodings(images)
+def instantPrint(text : str):
+    print(f"\n{text}", flush=True)
+    print("-" * 50, flush=True)
+
+# class FaceRecognition:
+#     def __init__(self):
+#         super().__init__()
+#         path = 'users/'
+#         images = []
+#         self.classNames = []
+#         self.encodings = []
+#         # Available images
+#         myList = os.listdir(path)
+#         for cl in myList:
+#             curImage = cv2.imread(os.path.join(path, cl))
+#             # Append the images to list
+#             images.append(curImage)
+#             # Append image names to list
+#             # name = os.path.spl
+#             self.classNames.append(os.path.splitext(cl)[0])
+#         self.compute_encodings(images)
     
-    def compute_encodings(self, imageList):
-        for image in imageList:
-            image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-            curEncode = fr.face_encodings(image)[0]
-            self.encodings.append(curEncode)
+#     def compute_encodings(self, imageList):
+#         for image in imageList:
+#             image = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+#             curEncode = fr.face_encodings(image)[0]
+#             self.encodings.append(curEncode)
 
-    def take_picture(self):
-        name = "Unknown user"
-        cap = cv2.VideoCapture(0)
-        face_names = []
-        face_locations = []
-        face_encodings = []
-        process_this_frame = True
-        while True:
-            ret, frame = cap.read()
-            small_frame = cv2.resize(frame, (0,0), fx=0.25, fy=0.25)
-            rgb_small_frame = small_frame[:, :, ::-1]
+#     def take_picture(self):
+#         name = "Unknown user"
+#         cap = cv2.VideoCapture(0)
+#         face_names = []
+#         face_locations = []
+#         face_encodings = []
+#         process_this_frame = True
+#         while True:
+#             ret, frame = cap.read()
+#             small_frame = cv2.resize(frame, (0,0), fx=0.25, fy=0.25)
+#             rgb_small_frame = small_frame[:, :, ::-1]
             
-            if process_this_frame:
-                face_locations = fr.face_locations(rgb_small_frame)
-                face_encodings = fr.face_encodings(rgb_small_frame)
-                face_names = []
-                for face_encoding in face_encodings:
-                    matches = fr.compare_faces(self.encodings, face_encoding)
-                    # name = "Unknown user"
-                    face_distances = fr.face_distance(self.encodings, face_encoding)
-                    best_match_index = np.argmin(face_distances)
-                    if matches[best_match_index]:
-                        name = self.classNames[best_match_index]
-                    face_names.append(name)
-            process_this_frame = not process_this_frame
+#             if process_this_frame:
+#                 face_locations = fr.face_locations(rgb_small_frame)
+#                 face_encodings = fr.face_encodings(rgb_small_frame)
+#                 face_names = []
+#                 for face_encoding in face_encodings:
+#                     matches = fr.compare_faces(self.encodings, face_encoding)
+#                     # name = "Unknown user"
+#                     face_distances = fr.face_distance(self.encodings, face_encoding)
+#                     best_match_index = np.argmin(face_distances)
+#                     if matches[best_match_index]:
+#                         name = self.classNames[best_match_index]
+#                     face_names.append(name)
+#             process_this_frame = not process_this_frame
 
-            for (top, right, bottom, left), name in zip(face_locations, face_names):
-                top *= 4
-                right *= 4
-                bottom *= 4
-                left *= 4        
+#             for (top, right, bottom, left), name in zip(face_locations, face_names):
+#                 top *= 4
+#                 right *= 4
+#                 bottom *= 4
+#                 left *= 4        
 
-                cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
+#                 cv2.rectangle(frame, (left, top), (right, bottom), (0, 0, 255), 2)
 
-                cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
+#                 cv2.rectangle(frame, (left, bottom - 35), (right, bottom), (0, 0, 255), cv2.FILLED)
 
-                font = cv2.FONT_HERSHEY_DUPLEX
-                cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
+#                 font = cv2.FONT_HERSHEY_DUPLEX
+#                 cv2.putText(frame, name, (left + 6, bottom - 6), font, 1.0, (255, 255, 255), 1)
                 
-            cv2.imshow("Recognizer", frame)
+#             cv2.imshow("Recognizer", frame)
 
-            if cv2.waitKey(1) & 0xFF == ord('q'):
-                break
+#             if cv2.waitKey(1) & 0xFF == ord('q'):
+#                 break
 
-        cap.release()
-        cv2.destroyAllWindows()
-        return name
+#         cap.release()
+#         cv2.destroyAllWindows()
+#         return name
+
+
 
 # if __name__ == '__main__':
 #     face = FaceRecognition()
