@@ -1,11 +1,11 @@
-from gtts import gTTS
+import pyttsx3
 import speech_recognition as sr
 from os import remove
 from datetime import datetime
-from play_music import MusicPlayer
+# from play_music import MusicPlayer
 from time import sleep
 from data import STOPWORDS
-from utilities import FaceRecognition, Search
+from utilities import Search, instantPrint
 from execute import Commands
 
 USERNAME = "Nikhil"
@@ -15,16 +15,27 @@ class Gideon:
         super().__init__()
         self.recognizer = sr.Recognizer()
         self.recognizer.energy_threshold = 900.0
-        self.speaker = MusicPlayer()
+        self.initialize_speech_recognition_functionality()
+        # self.speaker = MusicPlayer()
         self.wish_user()
         self.commands = Commands()
         self.search = Search()
         # sp = spacy.load('en_core_web_sm')
         # self.stop_words = sp.Defaults.stop_words
 
+    def initialize_speech_recognition_functionality(self):
+        self.speech_engine = pyttsx3.init()
+        # getter method(gets the current value
+        # of engine property)
+        voices = self.speech_engine.getProperty('voices')
+        
+        # setter method .[0]=male voice and 
+        # [1]=female voice in set Property.
+        self.speech_engine.setProperty('voice', voices[0].id)
+
     def listen_to_user(self):
-        print("Listening....")
-        self.speaker.stop_music_player()
+        instantPrint("Listening....")
+        # self.speaker.stop_music_player()
         with sr.Microphone() as source:
             self.recognizer.adjust_for_ambient_noise(source)
             try:
@@ -47,18 +58,16 @@ class Gideon:
             return voice_data
 
     def startMusic(self):
-        self.speaker.start_music_player()
-
-    def speak(self, response):
-        tts = gTTS(text=response, lang='en')
-        audio_file = 'gideon_audio.mp3'
-        tts.save(audio_file)
-        self.speaker.stop_music_player()
-        from playsound import playsound
-        # self.speaker.gideon_speech()
-        playsound("gideon_audio.mp3")
-        print(response)
-        remove(audio_file)
+        self.speak("Not Supported...")
+        # self.speaker.start_music_player()
+    
+    def speak(self, audioText):
+        instantPrint(audioText)
+        # Method for the speaking of the assistant
+        self.speech_engine.say(audioText) 
+        # Blocks while processing all the currently
+        # queued commands
+        self.speech_engine.runAndWait()
 
     def wish_user(self):
         hour = int(datetime.now().hour)
@@ -87,12 +96,13 @@ class Gideon:
         return command
 
     def recognize_face(self):
-        self.speak("Getting ready for Face Recognition")
-        self.faceRecognizer = FaceRecognition()
-        self.speak("Hit 'q' to confirm when you have taken clear picture")
-        user = self.faceRecognizer.take_picture()
-        self.speak(f'{user} recognized')
-        self.loggedUser = user
+        self.speak("Currently Not Supported")
+        # self.speak("Getting ready for Face Recognition")
+        # self.faceRecognizer = FaceRecognition()
+        # self.speak("Hit 'q' to confirm when you have taken clear picture")
+        # user = self.faceRecognizer.take_picture()
+        # self.speak(f'{user} recognized')
+        # self.loggedUser = user
 
     def __del__(self):
         try:
