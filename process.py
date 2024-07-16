@@ -1,3 +1,4 @@
+from PyQt5.QtWidgets import QHBoxLayout, QLabel, QWidget, QVBoxLayout, QLineEdit
 
 applications = ["vscode", "android studio", "visual studio code",]
 
@@ -65,7 +66,7 @@ def process():
         command = command.remove('create')
         if('project' in command):
             command = command.remove('project')
-            folder = word in command for word in projects
+            folder = [word in command for word in projects]
             if folder:
                 createProject(typeOfProject=folder)
             else:
@@ -156,8 +157,8 @@ def whatQuest(command):
             print("Sorry but I may not have enough resources to aid in you in this question")
             print("Searching on web")
 
-    if __name__ == "__main__":
-        print("Try to find a way for getting documentation from ubuntu")
+if __name__ == "__main__":
+    print("Try to find a way for getting documentation from ubuntu")
 
 class CustomWidget(QWidget):
     def __init__(self):
@@ -165,7 +166,7 @@ class CustomWidget(QWidget):
 
     def createPopUpWidget(self, title="", extra=False):
         box = QWidget()
-        vbox = QVBoxLAyout()
+        vbox = QVBoxLayout()
         # hbox = QHBoxLayout()
         # inputName = QWidget()
         # label1 = QLabel("Name : ")
@@ -176,7 +177,7 @@ class CustomWidget(QWidget):
         # inputName.setLayout(hbox)
         widget = self.createWidget(label="Name : ", placeholderText="Enter the name of file/app")
         vbox.addWidget(widget)
-        if(extras):
+        if(extra):
             # inputPlace = QWidget()
             # hbox2 = QHBoxLayout()
             # label2 = QLabel("Path : ")
