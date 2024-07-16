@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "name": "Wake up!",
+        "time": "2021-06-01T08:00:00.000Z",
+        "repeat": "daily",
+        "enabled": true
+    },
+    {
+        "id": 2,
+        "name": "Alarm 2",
+        "time": "2021-06-01T08:30:00.000Z",
+        "repeat": "daily",
+        "enabled": true
+    }
+]

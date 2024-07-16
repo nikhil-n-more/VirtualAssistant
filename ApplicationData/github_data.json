@@ -1,0 +1,47 @@
+{
+    "visual studio 2022 path" : "C:\\Program Files\\Microsoft Visual Studio\\2022\\Professional\\Common7\\IDE",
+    "local office repo folder" : "C:\\Users\\Nikhil.More2\\source\\repos\\LeoFolder\\",
+    "local personal repo folder" : "C:\\Users\\Nikhil.More2\\Documents\\MyCodes\\",
+    "repos" : [
+        {
+            "name" : "pricesheet",
+            "accessibility" : 1,
+            "path" : "Dummy\\Leo.RFxPricesheetV2.api",
+            "remote" : "https://github.com/GEP-GitHub/Leo.RFxPricesheetV2.api",
+            "feature branch" : "DEV_NM_FEATURE_BRANCH",
+            "fixes branch" : "DEV_NM_FIXES_BRANCH",
+            "release branch" : "REL_NM_FIXES_BRANCH",
+            "hotfix branch" : "HOTFIX_NM_FIXES_BRANCH"
+        },
+        {
+            "name" : "core",
+            "accessibility" : 1,
+            "path" : "core\\Leo.RFxCoreV2.api",
+            "remote" : "https://github.com/GEP-GitHub/Leo.RFxCoreV2.api",
+            "feature branch" : "DEV_NM_FEATURE_BRANCH",
+            "fixes branch" : "DEV_NM_FIXES_BRANCH",
+            "release branch" : "REL_NM_FIXES_BRANCH",
+            "hotfix branch" : "HOTFIX_NM_FIXES_BRANCH"
+        },
+        {
+            "name" : "common",
+            "accessibility" : 1,
+            "path" : "common\\Leo.RFxCommonV2.nuget",
+            "remote" : "https://github.com/GEP-GitHub/Leo.RFxCommonV2.nuget",
+            "feature branch" : "DEV_NM_FEATURE_BRANCH",
+            "fixes branch" : "DEV_NM_FIXES_BRANCH",
+            "release branch" : "REL_NM_FIXES_BRANCH",
+            "hotfix branch" : "HOTFIX_NM_FIXES_BRANCH"
+        },
+        {
+            "name" : "bid analytics",
+            "accessibility" : 1,
+            "path" : "bidanalytics\\Leo.RFxBidAnalyticsV2.api",
+            "remote" : "https://github.com/GEP-GitHub/Leo.RFxBidAnalyticsV2.api/",
+            "feature branch" : "DEV_NM_FEATURE_BRANCH",
+            "fixes branch" : "DEV_NM_FIXES_BRANCH",
+            "release branch" : "REL_NM_FIXES_BRANCH",
+            "hotfix branch" : "HOTFIX_NM_FIXES_BRANCH"
+        }
+    ]
+}
