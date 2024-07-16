@@ -4,11 +4,15 @@ from PyQt5.QtCore import QSize, Qt
 from PyQt5.QtGui import QFont, QIcon, QPixmap
 import requests
 import json
-from utilities import Internet, UserAccess
-from gideon import Gideon
+from Utilities.internet_helper import Internet
+from Utilities.user_access_helper import UserAccess
+from gideon import VirtualAssistant as Gideon
 from time import sleep, time
 import sys
 import os
+from query_handler import QueryHandler
+from section_data_handler import SectionDataHandler
+
 # from data import *
 what = ["what is", "what's", "whats", "wht"]
 DEFAULT = "~/Documents/workspace/"
@@ -18,12 +22,19 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.assistant = Gideon()
+        self.queryHandler = QueryHandler()
+        self.sectionDataHandler = SectionDataHandler()
+        print("\nVirtual Assistant Initialized")
+        print("\n...............................\n")
+        self.processed = False
+
+    def setup_Full_UI(self):
         # self.assistant.speak("Hello Sir, I am gideon. Your personal virtual assistant")
         self.assistant.speak("Initialising my user interface for you")
         window = QWidget(self)
         self.setCentralWidget(window)
         window.setStyleSheet('background-color : rgb(0, 0, 0)')
-        self.setGeometry(50, 0, 1680, 900)
+        self.setGeometry(100, 50, 1680, 900)
         self.setWindowTitle("Gideon-Virtual Assistant")
         # Won't work on ubuntu, and probably not on unix systems
         self.setWindowIcon(QIcon("img/gideon_icon.jpg"))
@@ -38,12 +49,9 @@ class MainWindow(QMainWindow):
         window.setLayout(hbox)
         self.assistant.speak("All the sections initialized")
         self.initialize_helpers()
-        print("\nVirtual Assistant Initialized")
-        print("\n...............................\n")
         print("Initialization Complete")
         print("\n................................\n")
-        self.processed = False
-
+        
     def create_sections(self):
         self.first_section = QWidget()
         self.first_section.setStyleSheet('background-color : rgb(0,0,0)')
@@ -57,7 +65,7 @@ class MainWindow(QMainWindow):
 
     def initialize_helpers(self):
         self.assistant.speak("Initializing helper methods. Be patient")
-        self.internet = Internet()
+        #self.internet = Internet()
         # print("\nInternet Info agent initialized")
         self.user = UserAccess()
         print("\nWeather Info agent initialized")
@@ -68,7 +76,7 @@ class MainWindow(QMainWindow):
         self.setupRightWindow()
         self.assistant.speak("Right Window set up completed")
         self.assistant.speak("Updating Internet speed. This my take a while")
-        self.updateNetSpeed()
+        #self.updateNetSpeed()
         self.assistant.speak("Internet spead measured")
         self.assistant.speak("Setting up central window")
         self.setupCentralWindow()
@@ -182,7 +190,7 @@ class MainWindow(QMainWindow):
         color: white;
         border: 1px solid white;
         background-color: rgb(255, 102, 0);""")
-        # self.listen.clicked.connect(self.assistentListening)
+        self.listen.clicked.connect(self.assistentListening)
         hbox_listen.addWidget(self.listenArea)
         hbox_listen.addWidget(self.listen)
         listner_widget.setLayout(hbox_listen)
@@ -415,8 +423,6 @@ class MainWindow(QMainWindow):
         print("\n.....................................\nWeather Forcast Updated")
 
     def updateDate(self):
-        self.date.setText("Updating...")
-        self.time.setText("Updating...")
         data = self.user.get_current_date()
         latest_date = data["day"] + " " + data["month"] + " , " + data["year"]
         self.date.setText(latest_date)
@@ -453,16 +459,10 @@ class MainWindow(QMainWindow):
     
     def process_command(self, command):
         if("what" in command):
-            # for word in what:
-            #     try:
-            #         command = command.replace(word, '')
-            #     except:
-            #         continue
             self.whatQuest(command)
         print("Command Received : " + command)
         if('find' in command):
             if('location' in command):
-                command = command.replace("location", "")
                 command = command.replace("location", "")
                 self.assistant.speak("Enter the location")
                 location, result = QInputDialog.getText(self, "Location", "Enter location")
@@ -502,12 +502,11 @@ class MainWindow(QMainWindow):
             self.assistant.speak("My name is Gideon")
         elif('favorite' in command):
             if('color' in command):
-                self.assistant.speak("My favorite color is Blue. Same as my creator")
+                self.assistant.speak("My favorite color is Navy Blue. Same as my creator")
             elif('food' in command):
                 self.assistant.speak("My favorite food is NLP which my dumb creator hasn't given me")
-                self.assistant.speak("He just feeds me with hardcode command")
             elif('time pass' in command or 'pass time'):
-                self.assistant.speak("My favorite pass time is watching you love me")
+                self.assistant.speak("My favorite pass time is you asking me questions")
             elif('time' in command):
                 print(time())
             elif('destination' in command):
@@ -517,8 +516,8 @@ class MainWindow(QMainWindow):
             else:
                 self.assistant.speak('Are you sure of what you are asking. If you are then try typing it here')
         else:
-            # self.assistant.speak("Sorry but I may not have enough resources to aid in you in this question")
-            self.remainCommand()
+            self.assistant.speak("Sorry but I may not have enough resources to aid in you in this question")
+            # self.remainCommand()
 
     def display_location(self):
         location = self.user.get_location()
@@ -617,7 +616,9 @@ class MainWindow(QMainWindow):
             self.assistant.speak("File created")
 
     def closeCommand(self):
-        pass
+        self.assistant.speak("Thanks for choosing me")
+        self.assistant.speak("Initializing self destruction")
+        self.assistant.speak("Desctruction failed. Please close the terminal window")
 
     def playCommand(self, command):
         if('youtube' in command):
@@ -689,46 +690,10 @@ class MainWindow(QMainWindow):
             package, result = QInputDialog.getText(self, "Package", "Enter package name")
             self.assistant.commands.installPackage(package=package)
 
-if __name__ == '__main__':
-    app = QApplication(sys.argv)
-    window = MainWindow()
+    def closeEvent(self, event):
+        self.assistant.speak("Thanks for choosing me")
+        self.assistant.speak("Initializing self destruction")
+        self.assistant.speak("Desctruction failed. Please close the terminal window")
+        event.accept()
+
     
-    # splash_pix = QPixmap('img/gideon_icon.jpg')
-    # splash_pix = splash_pix.scaledToHeight(700)
-    # splash = QSplashScreen(splash_pix, Qt.WindowStaysOnTopHint)
-
-    # splash.setWindowFlags(Qt.WindowStaysOnTopHint | Qt.FramelessWindowHint)
-    # splash.setEnabled(False)
-    
-    # progressBar = QProgressBar(splash)
-    # progressBar.setMaximum(10)
-    # progressBar.setGeometry(0, splash_pix.height() - 50, splash_pix.width(), 20)
-
-    # splash.show()
-    # # splash.showMessage("<h1><font color='green'>Welcome Sir</font></h1>", Qt.AlignCenter | Qt.AlignTop, Qt.black)
-
-    # for i in range(1, 11):
-    #     progressBar.setValue(i)
-    #     t = time()
-    #     while time() < t + 0.2:
-    #         app.processEvents()
-
-    # sleep(1)
-
-    # window = MainWindow()
-    window.show()
-    window.assistant.recognize_face()
-    # splash.finish(window)
-    # window.initialize_helpers()
-    window.assistant.speak("I am ready to roll sir")
-
-    window.enable_inputs()
-
-    finish = time()
-    try:
-        print("Time Taken : ", str(window.assistant.time_taken(start=start, finish=finish)))
-    except:
-        print("something went wrong")
-    sys.exit(app.exec_())
-
-# implement creaate file functionality
