@@ -10,8 +10,8 @@ from gideon import VirtualAssistant as Gideon
 from time import sleep, time
 import sys
 import os
-from query_handler import QueryHandler
-from section_data_handler import SectionDataHandler
+# from query_handler import QueryHandler
+# from section_data_handler import SectionDataHandler
 
 # from data import *
 what = ["what is", "what's", "whats", "wht"]
@@ -22,8 +22,8 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.assistant = Gideon()
-        self.queryHandler = QueryHandler()
-        self.sectionDataHandler = SectionDataHandler()
+        # self.queryHandler = QueryHandler()
+        # self.sectionDataHandler = SectionDataHandler()
         print("\nVirtual Assistant Initialized")
         print("\n...............................\n")
         self.processed = False
@@ -550,7 +550,7 @@ class MainWindow(QMainWindow):
             self.assistant.speak("Searching on google")    
 
     def fetchInfoCommand(self, command):
-        command = command.rplace('fetch', '')
+        command = command.replace('fetch', '')
         try:
             command = command.replace("info", "")
         except:

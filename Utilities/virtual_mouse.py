@@ -1,7 +1,7 @@
 import cv2
 import mediapipe as mp
 import pyautogui
-import hand_tracker_module as htm
+from .hand_tracker_module import HandDetector
 import time
 import numpy as np
 
@@ -14,7 +14,7 @@ class VirtualMouse():
         self.frameR = frameR
         
         self.wScr, self.hScr = pyautogui.size()
-        self.detector = htm.HandDetector(maxHands=1)
+        self.detector = HandDetector(maxHands=1)
 
     def run(self):
         plocX, plocY = 0, 0
